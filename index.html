@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LES CINQ AMIS - ATK Store</title>
-  <meta name="description" content="LES CINQ AMIS - Toko online alat tulis, buku, minuman, dan makanan untuk kebutuhan sekolah dan kantor. Proyek Akhir XII TKJ 1." />
+  <meta name="description" content="LES CINQ AMIS - Toko online alat tulis, buku, minuman, dan makanan untuk kebutuhan sekolah. Proyek Akhir XII TKJ 1." />
 
   <!-- Font Google & Icon Lucide -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +12,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.js"></script>
   <script>
-    // Fallback: jika unpkg gagal (misal diblokir/timeout), coba muat dari jsdelivr
     window.addEventListener('DOMContentLoaded', function () {
       if (typeof lucide === 'undefined') {
         var fallback = document.createElement('script');
@@ -57,6 +56,38 @@
       background-color: var(--bg);
       color: var(--text);
       padding-bottom: 84px;
+    }
+
+    /* Toast Notification Style */
+    #toastContainer {
+      position: fixed;
+      bottom: 76px;
+      right: 16px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast {
+      background: var(--dark);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      animation: slideInUp 0.3s ease forwards, fadeOut 0.3s ease 1.7s forwards;
+    }
+    @keyframes slideInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; transform: translateY(-5px); }
     }
 
     .bottom-nav {
@@ -326,14 +357,12 @@
     .hero-banner h2 { font-size: 18px; font-weight: 800; margin-bottom: 4px; position: relative; }
     .hero-banner p { opacity: 0.95; font-size: 12.5px; position: relative; }
 
-    /* Grid Layout Produk Shopee */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 14px;
     }
 
-    /* KARTU PRODUK GAYA SHOPEE */
     .shopee-product-card {
       background-color: var(--card-bg);
       border-radius: var(--radius);
@@ -485,7 +514,6 @@
 
     .add-cart-btn:hover { background-color: var(--primary); color: white; }
 
-    /* MODAL STYLES */
     .modal {
       display: none;
       position: fixed;
@@ -680,13 +708,81 @@
       text-align: center;
       margin-top: 8px;
     }
+    
     .qris-img {
-      width: 140px;
-      height: 140px;
+      width: 160px;
+      height: auto;
+      max-height: 220px;
       object-fit: contain;
       margin: 6px auto;
       border-radius: 6px;
       border: 1px solid var(--border);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease;
+    }
+    .qris-img:hover { transform: scale(1.02); }
+
+    .qris-zoom-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .qris-zoom-modal img {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 12px;
+      background: #fff;
+      padding: 10px;
+    }
+
+    .copy-btn {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 9.5px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .copy-btn:hover { background: var(--primary); color: white; }
+
+    /* Style Rating & Ulasan */
+    .review-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      font-size: 10.5px;
+    }
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+    .star-input-group {
+      display: flex;
+      gap: 4px;
+      font-size: 18px;
+      cursor: pointer;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+    }
+    .star-input-group span.active {
+      color: #f59e0b;
     }
 
     .history-card {
@@ -717,6 +813,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Toast Container -->
+  <div id="toastContainer"></div>
 
   <header>
     <div class="header-container">
@@ -758,7 +857,7 @@
   <main class="container">
     <div class="hero-banner">
       <h2>Selamat Datang di LES CINQ AMIS 📚</h2>
-      <p>Lengkapi kebutuhan sekolah dan kantor Anda</p>
+      <p>Lengkapi kebutuhan sekolahr Anda</p>
     </div>
 
     <h3 class="section-title" id="catalogTitle" style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--dark);">
@@ -767,6 +866,68 @@
 
     <div class="product-grid" id="productGrid"></div>
   </main>
+
+  <!-- MODAL DETAIL PRODUK & ULASAN -->
+  <div class="modal" id="productDetailModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="detailProductName">Detail Produk</h3>
+        <button class="close-btn" onclick="closeProductDetailModal()"><i data-lucide="x"></i></button>
+      </div>
+      <img id="detailProductImg" src="" alt="Produk" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; background: #f1f5f9; margin-bottom: 10px;">
+      
+      <div style="margin-bottom: 8px;">
+        <span id="detailProductCategory" class="shipping-tag" style="margin-bottom: 4px;">Kategori</span>
+        <h4 id="detailProductTitle" style="font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 6px;">Nama Produk</h4>
+        <div class="price-section" style="margin-bottom: 8px;">
+          <span id="detailProductOriginalPrice" class="original-price">Rp 0</span>
+          <span id="detailProductPrice" class="discounted-price" style="font-size: 16px;">Rp 0</span>
+        </div>
+      </div>
+
+      <div class="store-info-box" style="margin-bottom: 10px;">
+        <p style="font-size: 10.5px; font-weight: 700; margin-bottom: 3px; color: var(--dark);">Deskripsi Produk:</p>
+        <p id="detailProductDesc" style="font-size: 10.5px; color: var(--text-muted); line-height: 1.4;">Produk berkualitas tinggi untuk menunjang aktivitas belajar dan bekerja Anda sehari-hari.</p>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-muted); margin-bottom: 12px;">
+        <span id="detailProductRating">⭐ 5.0</span>
+        <span id="detailProductSold">0 Terjual</span>
+        <span id="detailProductLocation">Kab. Banjarnegara</span>
+      </div>
+
+      <button class="action-btn" id="detailAddToCartBtn" onclick="">+ Tambah ke Keranjang</button>
+
+      <!-- Bagian Ulasan Pembeli -->
+      <div style="margin-top: 14px; border-top: 1px solid var(--border); padding-top: 10px;">
+        <h4 style="font-size: 11px; font-weight: 700; color: var(--dark); margin-bottom: 6px;">Ulasan Pembeli (<span id="reviewCount">0</span>)</h4>
+        
+        <div id="productReviewsList" style="max-height: 130px; overflow-y: auto; margin-bottom: 10px;">
+          <p style="font-size: 10px; color: var(--text-muted); text-align: center;">Belum ada ulasan untuk produk ini.</p>
+        </div>
+
+        <form onsubmit="submitProductReview(event)" style="background: var(--bg); padding: 8px; border-radius: 8px; border: 1px solid var(--border);">
+          <p style="font-size: 10px; font-weight: 700; margin-bottom: 4px;">Tulis Ulasan Kamu:</p>
+          <div class="star-input-group" id="starInputGroup">
+            <span onclick="setRating(1)">★</span>
+            <span onclick="setRating(2)">★</span>
+            <span onclick="setRating(3)">★</span>
+            <span onclick="setRating(4)">★</span>
+            <span onclick="setRating(5)">★</span>
+          </div>
+          <div class="form-group" style="margin-bottom: 6px;">
+            <input type="text" id="reviewerName" placeholder="Nama Kamu" style="font-size: 10px; padding: 4px 6px;" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 6px;">
+            <textarea id="reviewComment" rows="2" placeholder="Bagaimana kualitas produk ini?" style="font-size: 10px; padding: 4px 6px;" required></textarea>
+          </div>
+          <button type="submit" class="action-btn" style="font-size: 10px; padding: 5px; margin-top: 0;">Kirim Ulasan</button>
+        </form>
+      </div>
+
+      <button class="back-btn" onclick="closeProductDetailModal()" style="margin-top: 10px;">Tutup</button>
+    </div>
+  </div>
 
   <!-- MODAL 1: INFO TOKO / KELOMPOK -->
   <div class="modal" id="storeModal">
@@ -811,8 +972,6 @@
   <!-- MODAL 2: PROFIL PELANGGAN -->
   <div class="modal" id="userProfileModal">
     <div class="modal-content">
-      
-      <!-- SUB-MODAL: MENU UTAMA PROFIL -->
       <div id="profileMainView">
         <div class="modal-header">
           <h3>Profil Saya</h3>
@@ -839,10 +998,10 @@
           </div>
         </div>
 
-        <button class="action-btn" style="background-color: #ef4444; margin-top: 12px;" onclick="closeUserProfileModal()">Tutup Profile</button>
+        <button class="action-btn" style="background-color: #64748b; margin-top: 12px; font-size: 10px;" onclick="resetStoreData()">🔄 Reset Riwayat & Stok</button>
+        <button class="action-btn" style="background-color: #ef4444; margin-top: 6px;" onclick="closeUserProfileModal()">Tutup Profile</button>
       </div>
 
-      <!-- SUB-MODAL: PENGATURAN AKUN -->
       <div id="editProfileView" style="display: none;">
         <div class="modal-header">
           <h3>Pengaturan Akun</h3>
@@ -866,7 +1025,6 @@
         </form>
       </div>
 
-      <!-- SUB-MODAL: RIWAYAT PESANAN -->
       <div id="historyView" style="display: none;">
         <div class="modal-header">
           <h3>Riwayat Pesanan</h3>
@@ -876,7 +1034,6 @@
         <button type="button" class="back-btn" onclick="showProfileSubView('profileMainView')">Kembali</button>
       </div>
 
-      <!-- SUB-MODAL: ALAMAT PENGIRIMAN -->
       <div id="addressView" style="display: none;">
         <div class="modal-header">
           <h3>Alamat Pengiriman</h3>
@@ -962,6 +1119,15 @@
           </div>
 
           <div class="form-group">
+            <label>Opsi Pengiriman & Ongkir</label>
+            <select id="shippingOption" required>
+              <option value="0">Ambil di Sekolah / Kelas (Gratis - Rp 0)</option>
+              <option value="3000">Kurir Kelompok / Area Sekolah (Rp 3.000)</option>
+              <option value="6000">Antar ke Rumah Sekitar (Rp 6.000)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
             <label>Metode Pembayaran</label>
             <select id="paymentMethod" required>
               <option value="E-Wallet">E-Wallet (QRIS / DANA / OVO)</option>
@@ -984,25 +1150,32 @@
           <div class="summary-row"><span>Email:</span><strong id="summaryEmail">-</strong></div>
           <div class="summary-row"><span>No HP:</span><strong id="summaryPhone">-</strong></div>
           <div class="summary-row"><span>Alamat:</span><strong id="summaryAddress" style="text-align: right; max-width:60%;">-</strong></div>
+          <div class="summary-row"><span>Pengiriman:</span><strong id="summaryShipping">-</strong></div>
           <div class="summary-row"><span>Metode:</span><strong id="summaryPaymentMethod" style="color: var(--primary);">-</strong></div>
         </div>
 
         <div id="qrisPaymentBox" class="payment-info-box">
           <p style="font-size: 10px; font-weight: 700; color: var(--dark);">Scan QRIS untuk membayar:</p>
-          <img src="qris-code.png" alt="QRIS Code" class="qris-img">
+          <img src="qris-code.jpg" alt="QRIS Code LES CINQ AMIS" class="qris-img" onclick="openQrisZoom()" title="Klik untuk memperbesar">
+          <p style="font-size: 8.5px; color: var(--text-muted); margin-top: 2px;">🔍 <i>Ketuk gambar QRIS untuk memperbesar</i></p>
           <p style="font-size: 9px; color: var(--text-muted);">Mendukung DANA, OVO, ShopeePay, GoPay, BCA Mobile, dll.</p>
         </div>
 
         <div id="bankPaymentBox" class="payment-info-box">
           <p style="font-size: 10px; font-weight: 700; color: var(--dark);">Transfer ke Rekening Bank:</p>
-          <p style="font-size: 12px; font-weight: 800; color: var(--primary); margin: 4px 0;">BCA: 123-456-7890</p>
+          <p style="font-size: 12px; font-weight: 800; color: var(--primary); margin: 4px 0;" id="bankAccountNumber">BCA: 123-456-7890</p>
           <p style="font-size: 9px; color: var(--text-muted);">a.n. LES CINQ AMIS Store</p>
+          <button type="button" class="copy-btn" onclick="copyBankAccount()">
+            <i data-lucide="copy" style="width:12px; height:12px;"></i> Salin No. Rekening
+          </button>
         </div>
 
         <div class="summary-box" style="margin-top: 8px;">
-          <strong style="display: block; margin-bottom: 4px;">Item:</strong>
+          <strong style="display: block; margin-bottom: 4px;">Rincian Biaya:</strong>
           <div id="summaryItemsList"></div>
-          <div class="summary-row" style="margin-top: 6px; font-size: 12px;">
+          <div class="summary-row"><span>Subtotal Produk:</span><strong id="summarySubtotal">Rp 0</strong></div>
+          <div class="summary-row"><span>Ongkos Kirim:</span><strong id="summaryOngkir">Rp 0</strong></div>
+          <div class="summary-row" style="margin-top: 6px; font-size: 12px; border-top: 1px dashed var(--border); padding-top: 4px;">
             <span>Total Bayar:</span><strong id="summaryTotal" style="color: var(--primary);">Rp 0</strong>
           </div>
         </div>
@@ -1012,11 +1185,14 @@
     </div>
   </div>
 
+  <div id="qrisZoomModal" class="qris-zoom-modal" onclick="closeQrisZoom()">
+    <img src="qris-code.jpg" alt="QRIS Zoom Preview">
+  </div>
+
   <footer>
     <p>&copy; 2026 LES CINQ AMIS - Tugas Project Jurusan TKJ.</p>
   </footer>
 
-  <!-- BOTTOM NAVIGATION -->
   <nav class="bottom-nav">
     <button class="bottom-nav-btn active" id="navBeranda" onclick="goHome()">
       <i data-lucide="home"></i>
@@ -1036,8 +1212,6 @@
     const EMAILJS_PUBLIC_KEY = "Duknpm2NhRrKbth1U"; 
     const EMAILJS_SERVICE_ID = "tekaje_2026";
     const EMAILJS_TEMPLATE_ID = "template_e03y0s3";
-    
-    // Ganti nomor WhatsApp ini dengan nomor Admin toko kamu (Gunakan format 62)
     const ADMIN_WA_NUMBER = "6285743381036";
 
     (function(){
@@ -1050,7 +1224,6 @@
       try {
         return localStorage.getItem(key) ?? fallback;
       } catch (err) {
-        console.warn('localStorage tidak bisa diakses:', err);
         return fallback;
       }
     }
@@ -1058,38 +1231,59 @@
     function safeStorageSet(key, value) {
       try {
         localStorage.setItem(key, value);
-      } catch (err) {
-        console.warn('Gagal menyimpan ke localStorage:', err);
-      }
+      } catch (err) {}
     }
 
     function safeCreateIcons() {
       if (typeof lucide !== 'undefined') {
         lucide.createIcons();
-      } else {
-        console.warn('lucide belum/gagal dimuat, ikon dilewati.');
       }
     }
 
-    const products = [
-      { id: 1, name: "Buku Tulis Sidu 30 lembar", price: 4500, originalPrice: 6000, discount: "25%", isMall: true, rating: "4.9", sold: "1,2rb", location: "Banjarpanepen", category: "Buku", image: "buku-tulis.png" },
-      { id: 2, name: "Pulpen Gel Hitam Smooth 0.5mm", price: 2500, originalPrice: 3500, discount: "28%", isMall: false, rating: "4.8", sold: "850", location: "Banjarpanepen", category: "Alat Tulis", image: "pulpen.png" },
-      { id: 3, name: "Buku Gambar A4 Tebal Kualitas Bagus", price: 4000, originalPrice: 5000, discount: "20%", isMall: true, rating: "5.0", sold: "500", location: "Banjarpanepen", category: "Buku", image: "buku-gambar.png" },
-      { id: 4, name: "Penggaris Plastik Transparan 30cm", price: 3500, originalPrice: 4000, discount: "12%", isMall: false, rating: "4.7", sold: "320", location: "Banjarpanepen", category: "Alat Tulis", image: "penggaris.png" },
-      { id: 5, name: "Penghapus Pensil Bebas Debu Soft", price: 2500, originalPrice: 3000, discount: "16%", isMall: false, rating: "4.9", sold: "2,1rb", location: "Banjarpanepen", category: "Alat Tulis", image: "penghapus.png" },
-      { id: 6, name: "Coca Cola 350ml", price: 5000, originalPrice: 5500, discount: "9,1%", isMall: false, rating: "4.0",sold: "200", location: "Banjarpanepen", category: "Minuman", image: "coca-cola.png" },
-      { id: 7, name: "Sprite 350ml", price: 5000, originalPrice: 5500, discount: "9,1%", isMall: false, rating: "3.9",sold: "200", location: "Banjarpanepen", category: "Minuman", image: "sprite.png" },
-      { id: 8, name: "Aqua 350ml", price: 3500, originalPrice: 4000, discount: "9,1%", isMall: false, rating: "3.5",sold: "500", location: "Banjarpanepen", category: "Minuman", image: "Aqua.png" },
-      { id: 9, name: "Malkist Coklat", price: 1000, originalPrice: 1500, discount: "9,1%", isMall: false, rating: "4.5",sold: "5000", location: "Banjarpanepen", category: "Makanan", image: "Malkist-coklat.png" },
-      { id: 10, name: "Nabati-keju", price: 1000, originalPrice: 1500, discount: "9.1%", isMall: false, rating: "5.0",sold: "50000", location: "Banjarpanepen", category: "Makanan", image: "Nabati Keju.png" },
-      { id: 11, name: "Nabati-coklat", price: 1000, originalPrice: 1500, discount: "9.1%", isMall: false, rating: "4.9",sold: "1000000", location: "Banjarpanepen", category: "Makanan", image: "Nabati Coklat.png" }
+    function showToast(message) {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML = `<i data-lucide="check-circle" style="width:14px; height:14px; color:#34d399;"></i> ${message}`;
+      container.appendChild(toast);
+      safeCreateIcons();
+
+      setTimeout(() => {
+        toast.remove();
+      }, 2000);
+    }
+
+    const defaultProducts = [
+      { id: 1, name: "Buku Tulis Sidu 30 lembar", price: 4500, originalPrice: 6000, discount: "25%", isMall: true, rating: "4.9", soldCount: 10, location: "Banjarpanepen", category: "Buku", image: "buku-tulis.png", desc: "Buku tulis berkualitas tinggi dengan kertas putih tebal yang nyaman untuk menulis catatan sekolah." },
+      { id: 2, name: "Pulpen Gel Hitam Smooth 0.5mm", price: 2500, originalPrice: 3500, discount: "28%", isMall: false, rating: "4.8", soldCount: 80, location: "Banjarpanepen", category: "Alat Tulis", image: "pulpen.png", desc: "Pulpen gel dengan tinta hitam pekat, anti-macet, dan mata pena 0.5mm memberikan hasil tulisan yang sangat rapi dan halus." },
+      { id: 3, name: "Buku Gambar A4 Tebal Kualitas Bagus", price: 4000, originalPrice: 5000, discount: "20%", isMall: true, rating: "5.0", soldCount: 50, location: "Banjarpanepen", category: "Buku", image: "buku-gambar.png", desc: "Buku gambar ukuran A4 dengan gramatur kertas tebal, cocok untuk menggambar menggunakan pensil, crayon, maupun cat air ringan." },
+      { id: 4, name: "Penggaris Plastik Transparan 30cm", price: 3500, originalPrice: 4000, discount: "12%", isMall: false, rating: "4.7", soldCount: 30, location: "Banjarpanepen", category: "Alat Tulis", image: "penggaris.png", desc: "Penggaris bening berbahan plastik lentur berkualitas yang tahan patah dengan ukuran garis akurat hingga 30 cm." },
+      { id: 5, name: "Penghapus Pensil Bebas Debu Soft", price: 2500, originalPrice: 3000, discount: "16%", isMall: false, rating: "4.9", soldCount: 20, location: "Banjarpanepen", category: "Alat Tulis", image: "penghapus.png", desc: "Penghapus pensil super lembut yang mampu menghapus bersih tanpa merusak kertas dan menghasilkan sedikit sisa debu." },
+      { id: 6, name: "Coca Cola 350ml", price: 5000, originalPrice: 5500, discount: "9,1%", isMall: false, rating: "4.0", soldCount: 20, location: "Banjarpanepen", category: "Minuman", image: "coca-cola.png", desc: "Minuman berkarbonasi menyegarkan kemasan botol 350ml, paling nikmat diminum dalam kondisi dingin saat cuaca panas." },
+      { id: 7, name: "Sprite 350ml", price: 5000, originalPrice: 5500, discount: "9,1%", isMall: false, rating: "3.9", soldCount: 20, location: "Banjarpanepen", category: "Minuman", image: "sprite.png", desc: "Minuman berkarbonasi rasa lemon-lime yang memberikan kesegaran instan dan menghilangkan dahaga seketika." },
+      { id: 8, name: "Aqua 350ml", price: 3500, originalPrice: 4000, discount: "9,1%", isMall: false, rating: "3.5", soldCount: 50, location: "Banjarpanepen", category: "Minuman", image: "aqua.png", desc: "Air mineral murni pegunungan pilihan dalam kemasan praktis 350ml untuk menemani aktivitas harianmu." },
+      { id: 9, name: "Malkist Coklat", price: 1000, originalPrice: 1500, discount: "9,1%", isMall: false, rating: "4.5", soldCount: 500, location: "Banjarpanepen", category: "Makanan", image: "malkist-coklat.png", desc: "Biskuit malkist renyah bertabur gula dengan lapisan krim coklat lezat di atasnya, pas untuk teman ngeteh atau ngopi." },
+      { id: 10, name: "Nabati-keju", price: 1000, originalPrice: 1500, discount: "9.1%", isMall: false, rating: "5.0", soldCount: 500, location: "Banjarpanepen", category: "Makanan", image: "nabati-keju.png", desc: "Wafer renyah isi krim keju richoco yang gurih dan kaya vitamin, camilan favorit pengganjal perut di sekolah." },
+      { id: 11, name: "Nabati-coklat", price: 1000, originalPrice: 1500, discount: "9.1%", isMall: false, rating: "4.9", soldCount: 100, location: "Banjarpanepen", category: "Makanan", image: "nabati-coklat.png", desc: "Wafer coklat renyah berlapis krim coklat tebal yang manis dan nikmat di setiap gigitan." }
     ];
 
+    let products = JSON.parse(safeStorageGet('storeProducts', JSON.stringify(defaultProducts)));
     let cart = JSON.parse(safeStorageGet('userCart', '[]'));
     let currentCategory = 'semua';
+    let currentSelectedProductId = null;
+    let selectedStarRating = 5;
 
     function formatRupiah(number) {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
+    }
+
+    function formatSold(num) {
+      if (num >= 1000000) {
+        return (num / 1000000).toFixed(1).replace('.', ',') + 'jt';
+      } else if (num >= 1000) {
+        return (num / 1000).toFixed(1).replace('.', ',') + 'rb';
+      }
+      return num.toString();
     }
 
     function displayProducts(items) {
@@ -1102,9 +1296,15 @@
       items.forEach(product => {
         const card = document.createElement("div");
         card.className = "shopee-product-card";
+        card.onclick = (e) => {
+          if (!e.target.closest('.add-cart-btn')) {
+            openProductDetail(product.id);
+          }
+        };
+
         card.innerHTML = `
           ${product.discount ? `<div class="badge-diskon">${product.discount} OFF</div>` : ''}
-          <img src="${product.image}" alt="${product.name}" class="product-img">
+          <img src="${product.image}" alt="${product.name}" class="product-img" loading="lazy">
           <div class="product-details">
             <h3 class="product-title">
               ${product.isMall ? '<span class="tag-mall">Mall</span>' : ''}
@@ -1120,7 +1320,7 @@
             <div>
               <div class="product-footer">
                 <div class="rating">⭐ ${product.rating || '5.0'}</div>
-                <div class="sold">${product.sold || '0'} Terjual</div>
+                <div class="sold">${formatSold(product.soldCount || 0)} Terjual</div>
               </div>
               <div class="seller-location">${product.location || 'Kab. Banjarnegara'}</div>
               <button class="add-cart-btn" onclick="addToCart(${product.id})">
@@ -1132,6 +1332,119 @@
         grid.appendChild(card);
       });
       safeCreateIcons();
+    }
+
+    function setRating(star) {
+      selectedStarRating = star;
+      const stars = document.querySelectorAll("#starInputGroup span");
+      stars.forEach((s, index) => {
+        if (index < star) {
+          s.classList.add("active");
+        } else {
+          s.classList.remove("active");
+        }
+      });
+    }
+
+    function openProductDetail(productId) {
+      currentSelectedProductId = productId;
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      document.getElementById("detailProductName").innerText = product.category;
+      document.getElementById("detailProductImg").src = product.image;
+      document.getElementById("detailProductCategory").innerText = product.category;
+      document.getElementById("detailProductTitle").innerText = product.name;
+      document.getElementById("detailProductOriginalPrice").innerText = product.originalPrice ? formatRupiah(product.originalPrice) : '';
+      document.getElementById("detailProductPrice").innerText = formatRupiah(product.price);
+      document.getElementById("detailProductDesc").innerText = product.desc || "Produk berkualitas pilihan dari LES CINQ AMIS.";
+      document.getElementById("detailProductRating").innerText = `⭐ ${product.rating || '5.0'}`;
+      document.getElementById("detailProductSold").innerText = `${formatSold(product.soldCount || 0)} Terjual`;
+      document.getElementById("detailProductLocation").innerText = product.location || 'Kab. Banjarnegara';
+
+      setRating(5);
+      document.getElementById("reviewerName").value = document.getElementById("fullName").value || "";
+      document.getElementById("reviewComment").value = "";
+
+      renderProductReviews(productId);
+
+      const addBtn = document.getElementById("detailAddToCartBtn");
+      addBtn.onclick = function() {
+        addToCart(product.id);
+        closeProductDetailModal();
+      };
+
+      document.getElementById("productDetailModal").style.display = "flex";
+      safeCreateIcons();
+    }
+
+    function closeProductDetailModal() {
+      document.getElementById("productDetailModal").style.display = "none";
+    }
+
+    function renderProductReviews(productId) {
+      const allReviews = JSON.parse(safeStorageGet('storeReviews', '{}'));
+      const productReviews = allReviews[productId] || [];
+      const container = document.getElementById("productReviewsList");
+      document.getElementById("reviewCount").innerText = productReviews.length;
+
+      if (productReviews.length === 0) {
+        container.innerHTML = '<p style="font-size: 10px; color: var(--text-muted); text-align: center; padding: 6px 0;">Belum ada ulasan untuk produk ini.</p>';
+        return;
+      }
+
+      container.innerHTML = "";
+      productReviews.forEach(rev => {
+        const starsText = '★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating);
+        const div = document.createElement("div");
+        div.className = "review-card";
+        div.innerHTML = `
+          <div class="review-header">
+            <span>${rev.name}</span>
+            <span style="color: #f59e0b;">${starsText}</span>
+          </div>
+          <p style="color: var(--text);">${rev.comment}</p>
+          <span style="font-size: 9px; color: var(--text-muted); display: block; margin-top: 2px;">${rev.date}</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function submitProductReview(e) {
+      e.preventDefault();
+      if (!currentSelectedProductId) return;
+
+      const name = document.getElementById("reviewerName").value.trim();
+      const comment = document.getElementById("reviewComment").value.trim();
+
+      const allReviews = JSON.parse(safeStorageGet('storeReviews', '{}'));
+      if (!allReviews[currentSelectedProductId]) {
+        allReviews[currentSelectedProductId] = [];
+      }
+
+      const newReview = {
+        name: name,
+        rating: selectedStarRating,
+        comment: comment,
+        date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+      };
+
+      allReviews[currentSelectedProductId].unshift(newReview);
+      safeStorageSet('storeReviews', JSON.stringify(allReviews));
+
+      const productReviews = allReviews[currentSelectedProductId];
+      const avgRating = (productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length).toFixed(1);
+      
+      const product = products.find(p => p.id === currentSelectedProductId);
+      if (product) {
+        product.rating = avgRating;
+        safeStorageSet('storeProducts', JSON.stringify(products));
+        displayProducts(products);
+      }
+
+      document.getElementById("reviewComment").value = "";
+      renderProductReviews(currentSelectedProductId);
+      showToast("Ulasan berhasil dikirim! Terima kasih.");
     }
 
     function filterCategory(category, btnElement) {
@@ -1183,6 +1496,7 @@
       const cartItem = cart.find(item => item.id === productId);
       if (cartItem) { cartItem.qty += 1; } else { cart.push({ ...product, qty: 1 }); }
       updateCartBadge();
+      showToast(`Berhasil tambah ${product.name}`);
     }
 
     function changeQty(productId, delta) {
@@ -1311,6 +1625,7 @@
             <span class="status-badge">${order.paymentMethod}</span>
           </div>
           <div style="font-size: 10px; margin-bottom: 4px; white-space: pre-line;">${order.itemsText}</div>
+          <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">🚚 ${order.shippingText}</div>
           <div style="display:flex; justify-content:space-between; font-weight:700; color:var(--primary); font-size: 11px;">
             <span>Total:</span>
             <span>${order.total}</span>
@@ -1327,6 +1642,32 @@
       });
       if (viewId === 'historyView') renderOrderHistory();
       safeCreateIcons();
+    }
+
+    function resetStoreData() {
+      if (confirm("Reset semua riwayat pesanan, ulasan, dan kembalikan jumlah terjual produk ke semula?")) {
+        localStorage.removeItem('userOrderHistory');
+        localStorage.removeItem('storeProducts');
+        localStorage.removeItem('storeReviews');
+        products = JSON.parse(JSON.stringify(defaultProducts));
+        displayProducts(products);
+        alert("Data berhasil direset!");
+        closeUserProfileModal();
+      }
+    }
+
+    function openQrisZoom() {
+      document.getElementById("qrisZoomModal").style.display = "flex";
+    }
+    function closeQrisZoom() {
+      document.getElementById("qrisZoomModal").style.display = "none";
+    }
+
+    function copyBankAccount() {
+      const textToCopy = "1234567890";
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        alert("Nomor rekening BCA (1234567890) berhasil disalin!");
+      }).catch(err => {});
     }
 
     window.addEventListener('click', function(e) {
@@ -1393,7 +1734,6 @@
 
     function validateFormInputs() {
       let isValid = true;
-
       const name = document.getElementById("fullName");
       const email = document.getElementById("email");
       const phone = document.getElementById("phoneNumber");
@@ -1402,36 +1742,30 @@
       const jalan = document.getElementById("jalan");
 
       if (name.value.trim().length < 3) {
-        showError(name, "nameError");
-        isValid = false;
+        showError(name, "nameError"); isValid = false;
       } else { hideError(name, "nameError"); }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email.value.trim())) {
-        showError(email, "emailError");
-        isValid = false;
+        showError(email, "emailError"); isValid = false;
       } else { hideError(email, "emailError"); }
 
       const cleanPhone = phone.value.replace(/[-\s]/g, '');
       const indoPhoneRegex = /^(\+62|62|0)8[0-9]{8,12}$/;
       if (!indoPhoneRegex.test(cleanPhone)) {
-        showError(phone, "phoneError");
-        isValid = false;
+        showError(phone, "phoneError"); isValid = false;
       } else { hideError(phone, "phoneError"); }
 
       if (kecamatan.value.trim().length < 3) {
-        showError(kecamatan, "kecamatanError");
-        isValid = false;
+        showError(kecamatan, "kecamatanError"); isValid = false;
       } else { hideError(kecamatan, "kecamatanError"); }
 
       if (desa.value.trim().length < 3) {
-        showError(desa, "desaError");
-        isValid = false;
+        showError(desa, "desaError"); isValid = false;
       } else { hideError(desa, "desaError"); }
 
       if (jalan.value.trim().length < 8) {
-        showError(jalan, "jalanError");
-        isValid = false;
+        showError(jalan, "jalanError"); isValid = false;
       } else { hideError(jalan, "jalanError"); }
 
       return isValid;
@@ -1465,12 +1799,16 @@
       const kecVal = document.getElementById("kecamatan").value.trim();
       const desaVal = document.getElementById("desa").value.trim();
       const jalanVal = document.getElementById("jalan").value.trim();
+      const shippingSelect = document.getElementById("shippingOption");
+      const shippingCost = parseInt(shippingSelect.value);
+      const shippingText = shippingSelect.options[shippingSelect.selectedIndex].text;
       const method = document.getElementById("paymentMethod").value;
 
       document.getElementById("summaryName").innerText = nameVal;
       document.getElementById("summaryEmail").innerText = emailVal;
       document.getElementById("summaryPhone").innerText = phoneVal;
       document.getElementById("summaryAddress").innerText = `${jalanVal}, ${desaVal}, ${kecVal}`;
+      document.getElementById("summaryShipping").innerText = shippingText;
       document.getElementById("summaryPaymentMethod").innerText = method;
 
       const existingProfileData = JSON.parse(safeStorageGet('userProfileData', '{}'));
@@ -1498,18 +1836,23 @@
 
       const summaryContainer = document.getElementById("summaryItemsList");
       summaryContainer.innerHTML = "";
-      let total = 0;
+      let subtotal = 0;
       cart.forEach(item => {
-        total += item.price * item.qty;
-        summaryContainer.innerHTML += `<div class="summary-row"><span>${item.name} (${item.qty}x)</span><span>${formatRupiah(item.price * item.qty)}</span></div>`;
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+        summaryContainer.innerHTML += `<div class="summary-row"><span>${item.name} (${item.qty}x)</span><span>${formatRupiah(itemTotal)}</span></div>`;
       });
-      document.getElementById("summaryTotal").innerText = formatRupiah(total);
+
+      const grandTotal = subtotal + shippingCost;
+
+      document.getElementById("summarySubtotal").innerText = formatRupiah(subtotal);
+      document.getElementById("summaryOngkir").innerText = formatRupiah(shippingCost);
+      document.getElementById("summaryTotal").innerText = formatRupiah(grandTotal);
 
       document.getElementById("checkoutStep").style.display = "none";
       document.getElementById("confirmStep").style.display = "block";
     }
 
-    // FUNGSI UTAMA PROSES PESANAN & WHATSAPP
     function processFinalOrder() {
       const submitBtn = document.getElementById("finalSubmitBtn");
       submitBtn.disabled = true;
@@ -1521,57 +1864,71 @@
       const kec = document.getElementById("kecamatan").value.trim();
       const desa = document.getElementById("desa").value.trim();
       const jalan = document.getElementById("jalan").value.trim();
+      const shippingSelect = document.getElementById("shippingOption");
+      const shippingCost = parseInt(shippingSelect.value);
+      const shippingText = shippingSelect.options[shippingSelect.selectedIndex].text;
       const method = document.getElementById("paymentMethod").value;
 
       let itemsText = "";
       let itemsWaText = "";
-      let total = 0;
+      let subtotal = 0;
 
       cart.forEach(item => {
         const itemTotal = item.price * item.qty;
         itemsText += `- ${item.name} (${item.qty}x) = ${formatRupiah(itemTotal)}\n`;
         itemsWaText += `• *${item.name}* (${item.qty}x) - ${formatRupiah(itemTotal)}\n`;
-        total += itemTotal;
+        subtotal += itemTotal;
       });
 
+      const grandTotal = subtotal + shippingCost;
       const fullAddress = `${jalan}, Desa ${desa}, Kec. ${kec}`;
 
-      // 1. Data EmailJS
       const templateParams = {
         from_name: name,
         to_email: email,
         phone_number: phone,
         address: fullAddress,
+        shipping_info: shippingText,
         payment_method: method,
         order_items: itemsText,
-        total_price: formatRupiah(total)
+        total_price: formatRupiah(grandTotal)
       };
 
-      // 2. Format Pesan WhatsApp
       const waMessage = 
         `Halo Admin *LES CINQ AMIS*, saya mau konfirmasi pembayaran pesanan nih! 🛒\n\n` +
         `*--- DETAIL PEMBELI ---*\n` +
         `👤 *Nama:* ${name}\n` +
         `📱 *No. HP:* ${phone}\n` +
-        `📍 *Alamat:* ${fullAddress}\n\n` +
+        `📍 *Alamat:* ${fullAddress}\n` +
+        `🚚 *Pengiriman:* ${shippingText}\n\n` +
         `*--- DETAIL PESANAN ---*\n` +
         `${itemsWaText}\n` +
-        `💰 *Total Bayar:* *${formatRupiah(total)}*\n` +
+        `📦 Subtotal: ${formatRupiah(subtotal)}\n` +
+        `🚚 Ongkir: ${formatRupiah(shippingCost)}\n` +
+        `💰 *Total Bayar:* *${formatRupiah(grandTotal)}*\n` +
         `💳 *Metode Bayar:* ${method}\n\n` +
         `Berikut saya lampirkan bukti transfernya ya min. Mohon diproses! 🙏`;
 
       const encodedWaMessage = encodeURIComponent(waMessage);
       const waUrl = `https://wa.me/${ADMIN_WA_NUMBER}?text=${encodedWaMessage}`;
 
-      // 3. Kirim Email lalu Direct ke WhatsApp
       emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
         .then(function() {
+          cart.forEach(cartItem => {
+            const matchedProduct = products.find(p => p.id === cartItem.id);
+            if (matchedProduct) {
+              matchedProduct.soldCount = (matchedProduct.soldCount || 0) + cartItem.qty;
+            }
+          });
+          safeStorageSet('storeProducts', JSON.stringify(products));
+
           const currentHistory = JSON.parse(safeStorageGet('userOrderHistory', '[]'));
           const newOrder = {
             id: Date.now(),
             date: new Date().toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }),
             itemsText: itemsText,
-            total: formatRupiah(total),
+            shippingText: shippingText,
+            total: formatRupiah(grandTotal),
             paymentMethod: method
           };
           currentHistory.unshift(newOrder);
@@ -1581,6 +1938,8 @@
           updateCartBadge();
           closeCart();
           document.getElementById("shippingForm").reset();
+
+          displayProducts(products);
 
           alert("Pesanan berhasil dicatat! Kamu akan diarahkan ke WhatsApp untuk mengirim bukti pembayaran.");
           window.open(waUrl, '_blank');
